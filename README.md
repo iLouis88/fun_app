@@ -13,8 +13,9 @@ Setup firebase and run
 2. The project using Flutter SDK 3.7.8
 
 ![alt text](./assets/joke_app.png)
+![alt text](./assets/algorithm.png)
 
-## 
-Nguyễn Văn Thành
-Phone/ Zalo: 0395.620.726
-Email: ThanhFW28@gmail.com
+## ____
+- Nguyễn Văn Thành
+- Phone/ Zalo: 0395.620.726
+- Email: ThanhFW28@gmail.com
