@@ -83,15 +83,12 @@ class _JokeScreenState extends State<JokeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.grey
-        ),
+        iconTheme: const IconThemeData(color: Colors.grey),
         backgroundColor: Colors.white,
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             const Text(
               'Joke App',
               style: TextStyle(
@@ -104,7 +101,6 @@ class _JokeScreenState extends State<JokeScreen> {
             ),
           ],
         ),
-
       ),
       body: Center(
         child: Column(
@@ -142,8 +138,16 @@ class _JokeScreenState extends State<JokeScreen> {
                         onLiked: () => vote(true),
                         onDisliked: () => vote(false),
                       )
-                    : const Text(
-                        "That's all the jokes for today! Come back another day!"),
+                    : Container(
+                        height: 300,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                "That's all the jokes for today! Come back another day!"),
+                          ],
+                        ),
+                      ),
             Container(
               alignment: Alignment.bottomCenter,
               padding: const EdgeInsets.only(top: 30),
@@ -153,6 +157,7 @@ class _JokeScreenState extends State<JokeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: () {
           _showBottomSheet(context);
         },
