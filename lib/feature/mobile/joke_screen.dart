@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../colors.dart';
 import '../../model/Joke_model.dart';
 import 'joke_card.dart';
 
@@ -10,7 +11,8 @@ class JokeScreen extends StatefulWidget {
   _JokeScreenState createState() => _JokeScreenState();
 }
 
-class _JokeScreenState extends State<JokeScreen> {
+class _JokeScreenState extends State<JokeScreen>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late CollectionReference jokesCollection;
   late QuerySnapshot jokesSnapshot;
@@ -18,12 +20,25 @@ class _JokeScreenState extends State<JokeScreen> {
   bool isLoading = true;
   bool hasMoreJokes = true;
   int totalJokesCount = 0;
+  late TabController tabBarController;
 
   @override
   void initState() {
     super.initState();
     jokesCollection = firestore.collection('jokes');
     fetchJokes();
+    tabBarController = TabController(
+      length: 1,
+      vsync: this,
+    );
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabBarController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   Future<void> fetchJokes() async {
@@ -82,91 +97,116 @@ class _JokeScreenState extends State<JokeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.grey),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Joke App',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            Text(
-              'Total Jokes: $totalJokesCount',
-              style: const TextStyle(color: Colors.black),
-            ),
-          ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(65),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          leading: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Image.asset(
+                'assets/logo_1.jpg',
+              )),
+          actions: [Image.asset('assets/logo_2.jpg')],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              height: 100,
-              color: Colors.green,
+      bottomNavigationBar: BottomAppBar(
+          child: Padding(
+        padding: const EdgeInsets.only(
+          top: 10,
+          bottom: 10,
+          left: 5,
+          right: 5,
+        ),
+        child: SizedBox(
+            height: 115,
+            child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Text(
-                    'A joke a day keeps the doctor away',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: 10,
+                      left: 10,
+                    ),
+                    child: Text(
+                      'This appis created as part of Hlsolution program. The material con-tained on this website are provided for general information only and do not constitute any from of advice. HLS assumes no responsibility for the accuracy of any particular statement and accepts no liability for any loss or damage which may arise from reliance on the infor-mation contained on this site.',
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    'If you joke wrong way, you teeth have to pay.(Serious)',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    'Copyright 2021 HLS',
+                    style: TextStyle(color: textC1, fontSize: 18),
                   )
                 ],
               ),
-            ),
-            isLoading
-                ? const CircularProgressIndicator()
-                : hasMoreJokes
-                    ? JokeCard(
-                        joke: Joke.fromSnapshot(
-                            jokesSnapshot.docs[currentJokeIndex]),
-                        onLiked: () => vote(true),
-                        onDisliked: () => vote(false),
-                      )
-                    : Container(
-                        height: 300,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                                "That's all the jokes for today! Come back another day!"),
-                          ],
-                        ),
+            )),
+      )),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: 126,
+                color: Colors.green,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'A joke a day keeps the doctor away',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
                       ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.only(top: 30),
-              child: const Text('Copyright 2023 NVT'),
-            ),
-          ],
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'If you joke wrong way, you teeth have to pay.(Serious)',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : hasMoreJokes
+                      ? JokeCard(
+                          joke: Joke.fromSnapshot(
+                              jokesSnapshot.docs[currentJokeIndex]),
+                          onLiked: () => vote(true),
+                          onDisliked: () => vote(false),
+                        )
+                      : SizedBox(
+                          height: 300,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                  "That's all the jokes for today! Come back another day!"),
+                            ],
+                          ),
+                        ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      /*  floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         onPressed: () {
           _showBottomSheet(context);
         },
         child: const Icon(Icons.add),
-      ),
+      ),*/
     );
   }
 
-  void _showAddJokeDialog() {
+/*  void _showAddJokeDialog() {
     showDialog(
       context: context,
       builder: (context) {
@@ -215,9 +255,9 @@ class _JokeScreenState extends State<JokeScreen> {
         );
       },
     );
-  }
+  }*/
 
-  void _showBottomSheet(BuildContext context) {
+/*  void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -237,5 +277,5 @@ class _JokeScreenState extends State<JokeScreen> {
         );
       },
     );
-  }
+  }*/
 }
