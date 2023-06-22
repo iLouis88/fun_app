@@ -95,20 +95,27 @@ class _AlgorithmScreenState extends State<AlgorithmScreen> {
                 },
                 child: const Text('Calculate'),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 260),
-                child: Container(
-                    alignment: Alignment.bottomCenter,
-                    child: const Text(
-                      "Copyright 2023 NVT",
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    )),
-              )
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: SizedBox(
+            height: 50,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Copyright 2023 NVT',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }

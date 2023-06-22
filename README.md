@@ -12,8 +12,9 @@ Setup firebase and run
 1. Database: Firestore
 2. The project using Flutter SDK 3.7.8
 
-![alt text](./assets/joke_app.png)
-![alt text](./assets/algorithm.png)
+![alt text](./assets/mobile_joke.png)
+![alt text](./assets/mobile_joke_img(2).png)
+![alt text](./assets/algorithm_img.png)
 
 ## ____
 - Nguyễn Văn Thành
